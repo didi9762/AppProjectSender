@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "appClientSender",
-    "slug": "appClientSender",
+    "slug": "appsender",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -25,6 +25,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8df4be5e-ff27-4d6a-80f0-9d321c7e721c"
+      }
+    },
+    "owner": "didi9762"
   }
 }
