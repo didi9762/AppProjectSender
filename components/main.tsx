@@ -1,16 +1,14 @@
 import { useEffect, useState } from "react"
 import HomePage from "./homeScreen/HomePage"
 import { useAtom } from "jotai"
-import { baseurlAtom, senderSocket,userDetailes } from "./Atoms"
+import { baseurlAtom, intaliazation, senderSocket,userDetailes } from "./Atoms"
 import senderSocketFunc from "../clientSend"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useNavigation } from "@react-navigation/native"
 import { View,Text } from "react-native"
-import AlertSaveDaiolog from "./alerts/saveAlert"
 import AlertMain from "./alerts/AlertMain"
 import { alertType } from "../types"
 import closeTask from "./globalFunctions/closeTaskFunc"
-import updateUserInfo from "./userZone/updateUserInfoFunc"
 
 
 const Main = ()=>{
@@ -20,20 +18,10 @@ const [alertOn,setAlertOn] = useState<alertType|null>(null)
 const [url,setUrl] = useAtom(baseurlAtom)
 const navigation = useNavigation()
 
+
 useEffect (()=>{
-    async function startApp(){
-        if(!userD){
-        const userInfo = await updateUserInfo(url)
-        if(userInfo){
-        setuserD(userInfo)}
-        else{
-            navigation.navigate('LogIn' as never)
-        }
-    }
-    goOnline(false)
-    }
-    if(!userD){
-    startApp()}
+    if(!socket){
+    goOnline(false)}
 },[userD])
 
 async function goOnline(forceLogIn:boolean) {
@@ -47,14 +35,14 @@ async function goOnline(forceLogIn:boolean) {
         return
        }
     else{
-        console.log('connect socket...');
       const token = await AsyncStorage.getItem('token')
     const sender = senderSocketFunc(updateFunc, () => {
-      setSocket(null)}, userD.userName, userD.address, userD.city, userD.group,token
+      setSocket(null)}, userD.userName, userD.address, userD.city, userD.group,token,url
     );
     setSocket(sender.socket);}
     setuserD({...userD,online:true})
   }
+
 
 function updateFunc(type:string,info1:string,info2:string,info3:string){
         const alertDetailes = {
@@ -71,15 +59,13 @@ function closeAlert(){
     
 }
 
-function handleSaveConfirem(massage:string,taskId?:string,client?:string){
+function handleSaveConfirem(massage:string,taskId?:string,client?:string,address?:string){
 if(massage==='cancel'){
     return
 }
 else{
-    console.log(taskId,client);
-    
-    if(taskId&&client&&socket){
-    closeTask(taskId,client,socket)}
+    if(taskId&&client&&socket&&address&&userD){
+    closeTask(taskId,address,client,socket,userD.userName)}
 }
 }
 
@@ -87,15 +73,10 @@ else{
 
     return (
         <View  >
-            {userD?
-            <View>
+            {userD&&<View>
     <AlertMain isVisible={alertOn} handleSaveFunc={handleSaveConfirem} close={closeAlert} />
     <HomePage goOnline = {goOnline}/>
-    </View>:
-    <View style={{height:'100%',width:'100%',display:'flex',justifyContent:'center',alignItems:'center',backgroundColor:'blue'}}>
-<Text style={{fontSize:50}}>APP LOGO</Text>
-    </View>
-    }
+    </View>}
     </View>
     )
 }

@@ -7,8 +7,6 @@ import TemporaryUrl from "./temporaryUrl.js";
 // const ip = process.env.BASE_URL
 const ip = TemporaryUrl
 const baseurl = `http://${ip}:12345/server/`
-console.log('http url:',baseurl);
-
 const logInFunc = async (userName:string, password:string) => {
   try {
     const response = await axios.post(`${baseurl}login`, { userName: userName, password:password  });//change 

@@ -2,7 +2,7 @@ import axios from "axios";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { baseurlAtom } from "../Atoms";
+import { baseurlAtom, userDetailes } from "../Atoms";
 import LoadingAnimation from "../LoadAnimation";
 import { useNavigation } from "@react-navigation/native";
 
@@ -20,6 +20,7 @@ interface Info {
 
 const TaskShortView = ({ id,userName,index }: props) => {
   const [url] = useAtom(baseurlAtom);
+  const [userD] = useAtom(userDetailes)
   const [info, setInfo] = useState<Info | null>(null);
   const [isLoad,setIsLoad] = useState(false)
   const navigation = useNavigation()
@@ -42,7 +43,7 @@ const TaskShortView = ({ id,userName,index }: props) => {
       }
     }
     getData()
-  },[]);
+  },[userD]);
 
 function handlePress(){
     const link = info?.deliveryGuy?'InProgress':'OpenTasks'

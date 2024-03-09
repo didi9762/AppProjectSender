@@ -54,6 +54,7 @@ update()}
 
   return (
     <Modal
+    
       style={{ margin: 0, flex: 1 }}
       isVisible={isVisible}
       onBackdropPress={onClose}
@@ -157,7 +158,7 @@ update()}
 const styles = StyleSheet.create({
   modalStyle: {
     backgroundColor: "white",
-    width: "50%",
+    width: "80%",
     height: "100%",
   },
   option: {
@@ -167,8 +168,6 @@ const styles = StyleSheet.create({
     width: "80%",
     textAlign: "left",
     borderBottomColor: "black",
-    // borderColor:'black',
-    // borderWidth:0.5,
     borderBottomWidth: 0.5,
     borderStyle: "solid",
     marginBottom: 20,
@@ -177,10 +176,9 @@ const styles = StyleSheet.create({
     display: "flex",
 
     flexDirection: "column",
-    // justifyContent:'space-between',
     alignContent: "center",
     alignItems: "center",
-    marginTop: "40%",
+    marginTop: "20%",
   },
   textOption: {
     marginLeft: 15,

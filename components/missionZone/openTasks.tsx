@@ -54,8 +54,8 @@ refreshControl={<RefreshControl refreshing={isLoad} onRefresh={getData}/>}>
                 <TouchableOpacity
                 style={styles.btn}
                   onPress={() => {
-                    if (task && task.saved) {
-                      socket && closeTask(task.id, task.saved, socket);setReload(!reload)
+                    if (task && task.saved&&userD) {
+                      socket && closeTask(task.id,task.address, task.saved, socket,userD.userName);setReload(!reload)
                     }
                   }}
                 ><Text style={{ color:'white'}}>Confirm</Text></TouchableOpacity>

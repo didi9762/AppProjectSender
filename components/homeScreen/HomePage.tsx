@@ -20,8 +20,9 @@ interface props {
 export default function HomePage({ goOnline }: props) {
   const [userD] = useAtom(userDetailes);
   const navigation = useNavigation();
+  
 
-  return (
+  return (<View>{userD&&
     <View style={{ marginTop: 20 }}>
       <AppHeader />
       <View style={styles.btnContainer}>
@@ -59,7 +60,7 @@ export default function HomePage({ goOnline }: props) {
           })}
         </ScrollView>
       </View>
-    </View>
+    </View>}</View>
   );
 }
 

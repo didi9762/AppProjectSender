@@ -7,7 +7,7 @@ import ErrorAlert from "./errorAlert";
 
 interface props {
   isVisible: alertType | null;
-  handleSaveFunc: (massage: string, taskId?: string, client?: string) => void;
+  handleSaveFunc: (massage: string, taskId?: string,address?:string, client?: string) => void;
   close: () => void;
 }
 interface taskAlertInfo {
@@ -52,8 +52,8 @@ setErrorInfo({
     }
   }, [isVisible]);
 
-  function handleSave(massage: string, taskId?: string, client?: string) {
-    handleSaveFunc(massage, taskId, client);
+  function handleSave(massage: string, taskId?: string, client?: string,address?:string) {
+    handleSaveFunc(massage, taskId, client,address);
     setSaveAlertVisible(false);
     close();
   }

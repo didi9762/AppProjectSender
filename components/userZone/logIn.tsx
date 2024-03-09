@@ -1,72 +1,4 @@
-// import { useAtom } from "jotai";
-// import { View, Text } from "react-native";
-// import { baseurlAtom, userDetailes } from "../Atoms";
-// import { useEffect } from "react";
-// import axios from "axios";
-// import AsyncStorage from "@react-native-async-storage/async-storage";
-
-// const LogIn = () => {
-//   const [userD, setUserD] = useAtom(userDetailes);
-//   const [url] = useAtom(baseurlAtom);
-
-//   useEffect(() => {
-//     async function getData() {
-//       try {
-//         const response = await axios.post(`${url}sender/login`, {
-//           userName: "john_doe",
-//           password: "sender1pass",
-//         });
-//         const data = await response.data;
-//         AsyncStorage.setItem("token", data.token);
-//         const {
-//           userName,
-//           firstName,
-//           lastName,
-//           phone,
-//           group,
-//           requests,
-//           tasksInProgress,
-//           tasksOpen,
-//         } = data.userDetailes;
-//         setUserD({
-//           ...userD,
-//           online: false,
-//           userName: userName,
-//           firstName: firstName,
-//           lastName: lastName,
-//           phone: phone,
-//           group: group,
-//           requests: requests,
-//           tasksInProgress: tasksInProgress,
-//           tasksOpen:tasksOpen
-//         });
-//       } catch (e) {
-//         console.log("error try log in:", e);
-//       }
-//     }
-//     if (!userD) {
-//       getData();
-//     }
-//   }, []);
-
-//   return (
-//     <View
-//       style={{
-//         display: "flex",
-//         justifyContent: "center",
-//         alignItems: "center",
-//         width: "90%",
-//         height: "90%",
-//       }}
-//     >
-//       <Text>{userD?.userName}</Text>
-//     </View>
-//   );
-// };
-
-// export default LogIn;
-
-import React, { memo, useState } from 'react';
+import React, { useState } from 'react';
 import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
 import TextInput from './TextInput';
 import { userDetailes, baseurlAtom  } from '../Atoms';
@@ -80,18 +12,12 @@ const LoginScreen = ({ navigation }:any) => {
   const [userName, setUserName] = useState({ value: '', error: '' });
   const [password, setPassword] = useState({ value: '', error: '' });
   const [message,setMassage] = useState('massagge:')
-const [url,setUrl] = useState({value:'',error:''})
-const [baseurl,setBaseUrl] = useAtom(baseurlAtom)
-
+const [baseurl] = useAtom(baseurlAtom)
 
 
   const logInFunc = async (userName:string, password:string) => {
-    try {                                     // {url.value}
-      let urlToUse = 'https://app-http-server.vercel.app'
-      if(url.value!=='1'){urlToUse = `http://${url.value}:12345`}
-      console.log(urlToUse);
-      
-      const response = await axios.post(`${urlToUse}/sender/login`, { userName: userName, password:password  });//change 
+    try {        
+      const response = await axios.post(`${baseurl}sender/login`, { userName: userName, password:password  });//change 
       const data = await response.data;
       if(!data||data===null){return}
      
@@ -99,11 +25,9 @@ const [baseurl,setBaseUrl] = useAtom(baseurlAtom)
       return data.userDetailes
     } catch (e:any) {
       const error = e.response.data.error
-      console.log('log in error:',error);
+      console.log('log in error:',e);
       if(error ==='user not found'){setUserName({value:'',error:'User Name Incorerect'});return}
       if(error==='incorrect password'){setPassword({value:'',error:'Incorrect Password'});return}
-      else{setUrl({value:'',error:'invalid url'})}
-
     }
   };
   
@@ -116,32 +40,18 @@ const [baseurl,setBaseUrl] = useAtom(baseurlAtom)
   };
 
   const onLoginPressed = async() => {
-    let urlToUse = 'https://app-http-server.vercel.app'
-      if(url.value!=='1'){urlToUse = `http://${url.value}:12345`}
-    setBaseUrl(`${urlToUse}/`)
     const userD =await logInFunc(userName.value,password.value)
+    if(userD){
     userD.online = false
     setUserD(userD)
       setUserName({ ...userName, error: userName.error });
       setPassword({ ...password, error: password.error });
-      setUrl({...url,error:url.error})
       navigation.navigate('HomePage')
-      return;
+      return;}
     }  
 
   return (
  <View style={styles.container}>
- <TextInput
-        label="Server Url"
-        returnKeyType="next"
-        value={url.value}
-        onChangeText={text =>setUrl({ value: text, error: '' })}
-        error={!!url.error}
-        errorText={url.error}
-        autoCapitalize="none"
-        textContentType="username"
-      />
-
       <TextInput
         label="User Name"
         returnKeyType="next"

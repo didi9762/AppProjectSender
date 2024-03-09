@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.didi9762.appsender"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -31,6 +32,16 @@
         "projectId": "8df4be5e-ff27-4d6a-80f0-9d321c7e721c"
       }
     },
-    "owner": "didi9762"
+    "owner": "didi9762",
+    "plugins": [
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "usesCleartextTraffic": true
+          }
+        }
+      ]
+    ]
   }
 }

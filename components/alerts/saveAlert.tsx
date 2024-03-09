@@ -6,7 +6,7 @@ import { Text } from "react-native-elements"
 
 interface props{
     visible:boolean
-    handlePress:(massge:string,taskId?:string,client?:string)=>void
+    handlePress:(massge:string,taskId?:string,client?:string, address?:string)=>void
     saveInfo:{
         taskId:string,
         clientId:string,
@@ -38,7 +38,7 @@ overlayStyle={styles.dialogContainer}
       <Dialog.Actions>
       <Dialog.Button buttonStyle={styles.btn}  titleStyle={styles.txt} title="Cancel" onPress={()=>handlePress('cancel')}/>
 
-        <Dialog.Button  buttonStyle={{...styles.btn,marginRight:100}} titleStyle={styles.txt}  title="Confirm" onPress={()=>handlePress('confirm',saveInfo?.taskId,saveInfo?.clientId)}/>
+        <Dialog.Button  buttonStyle={{...styles.btn,marginRight:100}} titleStyle={styles.txt}  title="Confirm" onPress={()=>handlePress('confirm',saveInfo?.taskId,saveInfo?.clientId,saveInfo?.address)}/>
       </Dialog.Actions>
     </Dialog>
     ) 
