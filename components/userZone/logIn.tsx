@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { TouchableOpacity, StyleSheet, Text, View } from 'react-native';
+import React, { useState ,useEffect} from 'react';
+import { TouchableOpacity, StyleSheet, Text, View,BackHandler } from 'react-native';
 import TextInput from './TextInput';
 import { userDetailes, baseurlAtom  } from '../Atoms';
 import {Button} from 'react-native-paper' 
@@ -13,6 +13,18 @@ const LoginScreen = ({ navigation }:any) => {
   const [password, setPassword] = useState({ value: '', error: '' });
   const [message,setMassage] = useState('massagge:')
 const [baseurl] = useAtom(baseurlAtom)
+
+useEffect(() => {
+  if(!userD){
+  navigation.setOptions({
+    headerShown: false,
+  });
+  const backHandler = BackHandler.addEventListener(
+    'hardwareBackPress',
+    ()=>true
+  );
+  return () => backHandler.remove()}
+}, []);
 
 
   const logInFunc = async (userName:string, password:string) => {
