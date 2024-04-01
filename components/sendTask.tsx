@@ -17,6 +17,7 @@ import TaskForm from "./TaskForm";
 import { userDetailes } from "./Atoms";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 export default function PublishTask() {
   const [socket, setSocket] = useAtom(senderSocket);
   const [userD,setuserD] = useAtom( userDetailes);
@@ -43,7 +44,7 @@ export default function PublishTask() {
       price: Number(price),
       notes:'this is test',
       targetPhone:'0572682398',
-      wehicleType:'station'
+      vehicleType:'station'
     };
     await publish(newTask);
   }
@@ -61,7 +62,7 @@ export default function PublishTask() {
     socket.send(JSON.stringify({type:'privet',newTask:newTask}));
       setTasks((prevTasks) => ({
         ...prevTasks,
-        [newTask.id]: { task: newTask, deliveryGuy: "" },
+        [newTask._id]: { task: newTask, deliveryGuy: "" },
       }));
     }
     else{console.log('not socket');
@@ -73,7 +74,7 @@ export default function PublishTask() {
     );
     setTasks((prevTasks) => {
       const updatedTasks = { ...prevTasks };
-      delete updatedTasks[id];
+      delete updatedTasks[];
       return updatedTasks;
     });
   }

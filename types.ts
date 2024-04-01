@@ -1,3 +1,5 @@
+import { ObjectId } from "mongodb";
+
 type socketType = {
     serverAddress: string;
     userId: string;
@@ -6,22 +8,7 @@ type socketType = {
     socket: WebSocket;
   }|null;
 
-  type Task = {
-    type:'privet'|'public',
-    id:string;
-    sender:string;
-    open:boolean;
-    saved:false|string;
-    close:boolean;
-    address:string;
-    senderAddress?:string;
-    price:number;
-    username?:string;
-    notes:string;
-    targetPhone?:string;
-    wehicleType?:'motor'|'car'|'station'
-    deliveryGuy?:string
-  } |null
+  
 
   export type Requests = {
     userId:string,
@@ -37,7 +24,7 @@ type socketType = {
     group: Array<string>;
     online:boolean;
     requests:Array<Requests>
-    address?:string;
+    address:string;
     tasksInProgress:Array<string>
     tasksOpen:Array<string>;
   } |null
@@ -49,4 +36,28 @@ export type alertType = {
   info3?:string
 }
 
-  export {socketType,Task}
+export type TaskType = {
+  source: string;
+  destination: string;
+  pickupTime: number;
+  deliveryTime: 'now'|'long';
+  _id?:string;
+  sender:string;
+  open:boolean;
+  saved?:false|string;
+  weight?: number;
+  itemType?: string;
+  notes?: string;
+  vehicleType?:'motor'|'car'|'station'|''
+  deliveryGuy?:string
+  paymentMethod: 'cash' | 'app';
+  price: number;
+  type:'privet'|'public';
+  senderName: string;
+  senderPhone: string;
+  receiverName?: string;
+  receiverPhone?: string;
+} |null
+
+  export {socketType}
+

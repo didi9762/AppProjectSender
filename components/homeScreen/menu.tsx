@@ -10,43 +10,43 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import AntDesign from "react-native-vector-icons/AntDesign";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
-import Feather from 'react-native-vector-icons/Feather'
-import { baseurlAtom, userDetailes } from "../Atoms";
+import Feather from "react-native-vector-icons/Feather";
+import { baseurlAtom, menuChange, userDetailes } from "../Atoms";
 import updateUserInfo from "../userZone/updateUserInfoFunc";
 import { User } from "../../types";
-
 
 interface MenuProps {
   isVisible: boolean;
   onClose: () => void;
 }
 
-const Menu: React.FC<MenuProps> = ({ isVisible, onClose}) => {
+const Menu: React.FC<MenuProps> = ({ isVisible, onClose }) => {
   const { height } = Dimensions.get("window");
-  const [userD,setUserD] = useAtom(userDetailes)
-  const [url] = useAtom(baseurlAtom)
-  const [newIcon,setNewIcon] = useState(false)
-const navigation = useNavigation()
+  const [userD, setUserD] = useAtom(userDetailes);
+  const [url] = useAtom(baseurlAtom);
+  const [newIcon, setNewIcon] = useState(false);
+  const [update] = useAtom(menuChange)
+  const navigation = useNavigation();
 
   useEffect(() => {
-    async function update(){
-      if(userD){
-const {tasksInProgress,tasksOpen,groups,requests} = await updateUserInfo(url)
-const update = {
-  online: userD.online,
-  userName: userD.userName,
-  firstName: userD.firstName,
-  lastName: userD.lastName,
-  phone: userD.phone,
-  tasksInProgress:tasksInProgress,
-  tasksOpen:tasksOpen,group:groups,
-  requests:requests}
-setUserD(update)}
-}
-if(isVisible){
-update()}
+    // async function update() {
+      // if (userD) {
+    //     const { tasksInProgress, tasksOpen, group, requests } =
+    //       await updateUserInfo(url);
 
-  }, [isVisible]);
+    //     setUserD({
+    //       ...userD,
+    //       tasksInProgress: tasksInProgress,
+    //       tasksOpen: tasksOpen,
+    //       group: group,
+    //       requests: requests,
+    //     });
+    //   }
+    // }
+    // if (isVisible) {
+      // update();
+    // }
+  }, [menuChange]);
 
   function itemClick(linkTo: string) {
     navigation.navigate(linkTo as never);
@@ -54,7 +54,6 @@ update()}
 
   return (
     <Modal
-    
       style={{ margin: 0, flex: 1 }}
       isVisible={isVisible}
       onBackdropPress={onClose}
@@ -69,8 +68,8 @@ update()}
           <Pressable
             style={styles.option}
             onPress={() => {
-              itemClick('LogIn');
-              onClose()
+              itemClick("LogIn");
+              onClose();
             }}
           >
             <Ionicons name="person-circle" size={30} />
@@ -92,14 +91,15 @@ update()}
               itemClick("GroupsPage");
               onClose();
             }}
-          >{newIcon? (
-            <AntDesign
-              name="exclamationcircle"
-              size={25}
-              color={"#ff6f00d5"}
-              style={{ position: "absolute", right: 3, top: -5, zIndex: 2 }}
-            />
-          ) : null}
+          >
+            {newIcon ? (
+              <AntDesign
+                name="exclamationcircle"
+                size={25}
+                color={"#ff6f00d5"}
+                style={{ position: "absolute", right: 3, top: -5, zIndex: 2 }}
+              />
+            ) : null}
             <FontAwesome name="group" size={25} />
             <Text style={styles.textOption}>My Groups</Text>
           </Pressable>
@@ -110,7 +110,7 @@ update()}
               onClose();
             }}
           >
-            {userD&&userD.tasksInProgress.length>0? (
+            {userD && userD.tasksInProgress.length > 0 ? (
               <AntDesign
                 name="exclamationcircle"
                 size={25}
@@ -128,7 +128,7 @@ update()}
               onClose();
             }}
           >
-            {userD&&userD.tasksOpen.length>0? (
+            {userD && userD.tasksOpen.length > 0 ? (
               <AntDesign
                 name="exclamationcircle"
                 size={25}

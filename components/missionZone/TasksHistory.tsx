@@ -1,14 +1,13 @@
 import { useEffect, useState } from "react"
 import { View,ScrollView,Text,Button,RefreshControl,ActivityIndicator } from "react-native"
-import { Task } from "../../types"
+import { TaskType } from "../../types"
 import axios from "axios"
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { useAtom } from "jotai"
 import { baseurlAtom } from "../Atoms"
 
-
 const TaskHistory = ()=>{
-const [data,setData] = useState<Array<Task>>([])
+const [data,setData] = useState<Array<TaskType>>([])
 const [url] = useAtom(baseurlAtom)
 const [reload,setReload]=useState(false)
 const [isLoad,setIsLoad] = useState(false)
@@ -35,7 +34,7 @@ async function handleDelete(taskId:string){
     try{
     const response = await axios.delete(`${url}common/deletetaskhistory`,{headers:{
       "Content-Type":'aplication-json',
-      taskId:taskId,
+      taskId:taskId.toString(),
     authorization:token,
     isSender:true
     }})
@@ -49,12 +48,12 @@ return (<View>
     <ActivityIndicator size={80} />
     </View>:
     <ScrollView refreshControl={<RefreshControl refreshing={isLoad} onRefresh={getData}/>}>
-            {data.length>0?data.map((task,i)=>
+            {data?.length>0?data.map((task,i)=>
             <View key={i} style={{borderWidth:1}}>
-        <Text>{task?.address}</Text>
+        <Text>{task?.destination}</Text>
         <Text>{task?.price}</Text>
         <Text>Delivery Guy: {task?.deliveryGuy}</Text>
-        {task&&<Button title="delete" onPress={()=>handleDelete(task.id)}/>}
+        {task&&<Button title="delete" onPress={()=>task._id?handleDelete(task._id):null}/>}
           </View>
             ):<Text>No tasks in are saved history</Text>}
 

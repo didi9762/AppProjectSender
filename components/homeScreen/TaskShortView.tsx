@@ -2,26 +2,30 @@ import axios from "axios";
 import { useAtom } from "jotai";
 import { useEffect, useState } from "react";
 import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
-import { baseurlAtom, userDetailes } from "../Atoms";
+import { baseurlAtom, shortTaskChange, userDetailes } from "../Atoms";
 import LoadingAnimation from "../LoadAnimation";
 import { useNavigation } from "@react-navigation/native";
+import FontAwesome from "react-native-vector-icons/FontAwesome";
 
 interface props {
   id: string;
   userName:string,
-  index:number
+  index:number,
+  open:boolean,
 }
 interface Info {
-  address: string;
+  destination: string;
   deliveryGuy?: string;
   price: string;
+  saved:boolean;
   time?: string; // add task post time
-}
+} 
 
-const TaskShortView = ({ id,userName,index }: props) => {
+const TaskShortView = ({ id,userName,index,open}: props) => {
   const [url] = useAtom(baseurlAtom);
   const [userD] = useAtom(userDetailes)
-  const [info, setInfo] = useState<Info | null>(null);
+  const [taskInfo, setTaskInfo] = useState<Info | null>(null);
+  const [change] = useAtom(shortTaskChange)
   const [isLoad,setIsLoad] = useState(false)
   const navigation = useNavigation()
 
@@ -33,20 +37,21 @@ const TaskShortView = ({ id,userName,index }: props) => {
           headers: {
             userName:userName,
             taskId: id,
+            open:open
           },
         });
         const data = await JSON.parse(response.data);
-        setInfo(data);
+        setTaskInfo(data);
         setIsLoad(false)
       } catch (e) {
         console.log("error try get task info:", e);
       }
     }
     getData()
-  },[userD]);
+  },[change]);
 
 function handlePress(){
-    const link = info?.deliveryGuy?'InProgress':'OpenTasks'
+    const link = taskInfo?.deliveryGuy?'InProgress':'OpenTasks'
     navigation.navigate(link as never)
 }
 
@@ -55,10 +60,12 @@ function handlePress(){
     <View style={{width:'100%',alignItems:'center'}}>
         {isLoad?<LoadingAnimation w={'90%'} h={80}/>:
         <TouchableOpacity style={styles.container} onPress={handlePress}>
-            <Text style={{fontWeight:'bold',position:'absolute',left:10,top:10}}>{index+1}</Text>
+          <View style={{flexDirection:'row',justifyContent:open?'space-between':'space-around',width:'90%'}}>
+            <Text style={{fontWeight:'bold'}}>{index+1}</Text>
             <Text>Task Number ? </Text>
-      <Text>{`to ${info?.address}`}</Text>
-      <Text style={{ fontWeight: "bold" }}>{info?.price} ₪</Text></TouchableOpacity>}
+            {open?<FontAwesome name="hand-stop-o" size={25} color={taskInfo?.saved?'red':'white'}/>:null}</View>
+      <Text>{`to ${taskInfo?.destination}`}</Text>
+      <Text style={{ fontWeight: "bold" }}>{taskInfo?.price} ₪</Text></TouchableOpacity>}
       </View>
   );
 };

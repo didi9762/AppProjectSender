@@ -30,6 +30,8 @@ useEffect(() => {
   const logInFunc = async (userName:string, password:string) => {
     try {        
       const response = await axios.post(`${baseurl}sender/login`, { userName: userName, password:password  });//change 
+      console.log(response.data);
+      
       const data = await response.data;
       if(!data||data===null){return}
      

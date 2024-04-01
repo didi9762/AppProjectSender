@@ -16,7 +16,6 @@ interface props{
 
 const ErrorAlert = ({visible,handlePress,errorInfo}:props)=>{
 const navigation = useNavigation()
-
     return(
 <Dialog
 overlayStyle={styles.dialogContainer}
@@ -44,7 +43,7 @@ overlayStyle={styles.dialogContainer}
 const styles = StyleSheet.create({
     dialogContainer:{
 position:'absolute',
-top:0,
+top:10,
 width:'94%',
 height:'auto',
 borderRadius:20

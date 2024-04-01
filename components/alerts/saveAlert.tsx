@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
+
 import { useState } from "react"
 import { StyleSheet, TouchableOpacity, View } from "react-native"
 import { Dialog } from "react-native-elements"
@@ -10,7 +11,7 @@ interface props{
     saveInfo:{
         taskId:string,
         clientId:string,
-        address:string|undefined
+        destination:string|undefined
     } |null
 }
 
@@ -23,12 +24,12 @@ overlayStyle={styles.dialogContainer}
       isVisible={visible}
       onBackdropPress={()=>handlePress('cancel')}
     >
-      <Dialog.Title title="Miision Save Confirm"/>
-      <View style={{display:'flex',flexDirection:'row'}}>
+      <Dialog.Title title="Mision Save Confirm"/>
+      <View style={{display:'flex',flexDirection:'row',flexWrap:'wrap'}}>
       <Text>Delivery Guy:</Text>
       <Text style={styles.txtBold}>{saveInfo?.clientId}</Text>
       <Text> is saved the task to:</Text>
-       <Text style={styles.txtBold}> {saveInfo?.address}</Text>
+       <Text style={styles.txtBold}> {saveInfo?.destination}</Text>
       </View>
       <View style={{display:'flex',flexDirection:'row',justifyContent:'space-between'}}>
       <Text>Do you want to confirem?</Text>
@@ -38,7 +39,8 @@ overlayStyle={styles.dialogContainer}
       <Dialog.Actions>
       <Dialog.Button buttonStyle={styles.btn}  titleStyle={styles.txt} title="Cancel" onPress={()=>handlePress('cancel')}/>
 
-        <Dialog.Button  buttonStyle={{...styles.btn,marginRight:100}} titleStyle={styles.txt}  title="Confirm" onPress={()=>handlePress('confirm',saveInfo?.taskId,saveInfo?.clientId,saveInfo?.address)}/>
+        <Dialog.Button  buttonStyle={{...styles.btn,marginRight:100}} titleStyle={styles.txt}  title="Confirm" onPress={()=>{handlePress('confirm',saveInfo?.taskId,saveInfo?.clientId,saveInfo?.destination)}
+        }/>
       </Dialog.Actions>
     </Dialog>
     ) 
@@ -47,11 +49,10 @@ overlayStyle={styles.dialogContainer}
 const styles = StyleSheet.create({
     dialogContainer:{
 position:'absolute',
-top:0,
+top:10,
 width:'94%',
 height:'21%',
 borderRadius:20
-
     },
     btn:{
         backgroundColor:'#2525f19a',

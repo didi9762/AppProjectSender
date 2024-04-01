@@ -13,9 +13,7 @@ import TemporaryUrl from "./temporaryUrl.js";
 class Sender {
   
   constructor(updateFunc, closeFunc, userId, address, city, group,token,baseurl) {
-    
     const url = baseurl.includes('https')?'https://app-server-socket.onrender.com':baseurl.replace('12345', '8888');
-
     this.serverAddress = `${url}?token=${token}`;
     this.userId = userId;
     this.address = address;
@@ -33,12 +31,14 @@ class Sender {
     this.socket.addEventListener("message", async (event) => {
       const data = await JSON.parse(event.data);
       if (data.type === "note") {
-        console.log("note:", data.message);reconnect(data.socket)
+        updateFunc("note:", data.message)
       } else if (data.mission) {
         updateFunc('save',data.mission, data.client,data.address);
       }else if(data.type&&data.type==='done'){
         updateFunc('done',data.missionId,data.client,data.address)
-      } 
+      } else if(data.type==='update'||data.type==='postError'){
+        updateFunc(data.type,data.id?data.id:data.data,data.message)
+      }
       else {
         for (const key in data) {
           if (data.hasOwnProperty(key)) {

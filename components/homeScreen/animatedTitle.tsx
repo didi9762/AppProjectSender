@@ -42,6 +42,7 @@ const AnimatedTitle = ({ title,highlight1,highlight2 ,basicColor}: Props) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    marginTop:5
   },
   text: {
     fontSize: 24,

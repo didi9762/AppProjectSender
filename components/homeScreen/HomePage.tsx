@@ -22,7 +22,7 @@ export default function HomePage({ goOnline }: props) {
   const navigation = useNavigation();
   
 
-  return (<View>{userD&&
+  return (<View >{userD&&
     <View style={{ marginTop: 20 }}>
       <AppHeader />
       <View style={styles.btnContainer}>
@@ -40,22 +40,22 @@ export default function HomePage({ goOnline }: props) {
         <Text
           style={styles.txtTitle}
         >{`${userD?.tasksOpen.length} Open tasks`}</Text>
-        <ScrollView  style={{width:'60%',height:200}}>
+        <ScrollView  style={styles.scrollViewStyle}>
           {userD?.tasksOpen.map((task,i) => {
             return (
-              <TaskShortView index={i} key={task} id={task} userName={userD.userName} />
+              <TaskShortView open={true} index={i} key={task} id={task} userName={userD.userName} />
             );
           })}
         </ScrollView>
 
         <Text
-          style={styles.txtTitle}
+          style={{...styles.txtTitle,marginTop:50}}
         >{`${userD?.tasksInProgress.length} Tasks In Progress`}</Text>
 
-        <ScrollView style={{width:'60%',height:200}}>
+        <ScrollView style={styles.scrollViewStyle}>
           {userD?.tasksInProgress.map((task,i) => {
             return (
-              <TaskShortView index={i} key={task} id={task} userName={userD.userName} />
+              <TaskShortView open={false} index={i} key={task} id={task} userName={userD.userName} />
             );
           })}
         </ScrollView>
@@ -88,4 +88,7 @@ padding:20,
     fontWeight: "bold",
     fontSize: 20,
   },
+  scrollViewStyle:{
+    width:'60%',height:200
+  }
 });

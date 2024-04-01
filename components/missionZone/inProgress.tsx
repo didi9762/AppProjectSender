@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { ScrollView, View,Text,ActivityIndicator, RefreshControl} from "react-native"
-import { Task } from "../../types"
+import { TaskType } from "../../types"
 import axios from "axios"
 import { useAtom } from "jotai"
 import { baseurlAtom, senderSocket } from "../Atoms"
@@ -10,14 +10,13 @@ import AsyncStorage from "@react-native-async-storage/async-storage"
 
 
 const MissionsInProgress = ()=>{
-    const [data,setData] = useState<Array<Task>>([])
+    const [data,setData] = useState<Array<TaskType>>([])
     const [reload,setReload]=useState(false)
     const [url] = useAtom(baseurlAtom)
     const [socket] = useAtom(senderSocket)
     const [isLoad,setIsLoad] = useState(false)
 
     useEffect(()=>{
-
 getData()
     },[reload])
 
@@ -40,9 +39,9 @@ getData()
         <ActivityIndicator size={80} />
         </View>:
         <ScrollView refreshControl={<RefreshControl refreshing={isLoad} onRefresh={getData}/>}>
-            {data.length>0?data.map((task,i)=>
+            {data?.length>0?data.map((task,i)=>
             <View key={i} style={{borderWidth:1}}>
-        <Text>{task?.address}</Text>
+        <Text>{task?.destination}</Text>
         <Text>{task?.price}</Text>
         <Text>Delivery Guy: {task?.deliveryGuy}</Text>
           </View>

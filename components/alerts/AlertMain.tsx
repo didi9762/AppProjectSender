@@ -3,19 +3,26 @@ import AlertSaveDaiolog from "./saveAlert";
 import { useEffect, useState } from "react";
 import { alertType } from "../../types";
 import DoneAlert from "./DoneAlert";
-import ErrorAlert from "./errorAlert";
+import NoteAlert from "./noteAllert";
+import { useAtom } from "jotai";
+import { shortTaskChange } from "../Atoms";
 
 interface props {
   isVisible: alertType | null;
-  handleSaveFunc: (massage: string, taskId?: string,address?:string, client?: string) => void;
+  handleSaveFunc: (
+    massage: string,
+    taskId?: string,
+    address?: string,
+    client?: string
+  ) => void;
   close: () => void;
 }
 interface taskAlertInfo {
   taskId: string;
   clientId: string;
-  address: string | undefined;
+  destination: string | undefined;
 }
-interface errorAlertInfo {
+interface noteAlertInfo {
   type: string;
   message: string;
 }
@@ -25,8 +32,9 @@ const AlertMain = ({ isVisible, handleSaveFunc, close }: props) => {
   const [saveInfo, setSaveInfo] = useState<taskAlertInfo | null>(null);
   const [doneAlertVisible, setDoneAlertVisible] = useState(false);
   const [doneInfo, setDoneInfo] = useState<taskAlertInfo | null>(null);
-  const [errorInfo, setErrorInfo] = useState<errorAlertInfo | null>(null);
-  const [errorAlertVisible, setErrorAlertVisible] = useState(false);
+  const [noteInfo, setNoteInfo] = useState<noteAlertInfo | null>(null);
+  const [noteAlertVisible, setNoteAlertVisible] = useState(false);
+  const [shortTaskUpdate, setShortTaskUpdate] = useAtom(shortTaskChange);
 
   useEffect(() => {
     if (isVisible?.type === "save") {
@@ -34,26 +42,40 @@ const AlertMain = ({ isVisible, handleSaveFunc, close }: props) => {
       setSaveInfo({
         taskId: isVisible.info1,
         clientId: isVisible.info2,
-        address: isVisible.info3,
+        destination: isVisible.info3,
       });
+      setShortTaskUpdate(!shortTaskUpdate);
     } else if (isVisible?.type === "done") {
       setDoneAlertVisible(true);
       setDoneInfo({
         taskId: isVisible.info1,
         clientId: isVisible.info2,
-        address: isVisible.info3,
+        destination: isVisible.info3,
       });
-    }else if (isVisible?.type==='error'){
-setErrorAlertVisible(true)
-setErrorInfo({
-    type:isVisible.info1,
-    message:isVisible.info2
-})
+    } else if (isVisible?.type === "error" || isVisible?.type === "postError") {
+      setNoteAlertVisible(true);
+      setNoteInfo({
+        type: isVisible.info1,
+        message: isVisible.info2,
+      });
+    } else if (isVisible?.type === "note") {
+      setNoteAlertVisible(true);
+      setNoteInfo({
+        type: isVisible.info1,
+        message: isVisible.info2,
+      });
     }
   }, [isVisible]);
 
-  function handleSave(massage: string, taskId?: string, client?: string,address?:string) {
-    handleSaveFunc(massage, taskId, client,address);
+  function handleSave(
+    massage: string,
+    taskId?: string,
+    client?: string,
+    address?: string
+  ) {
+    if (taskId) {
+      handleSaveFunc(massage, taskId, client, address);
+    }
     setSaveAlertVisible(false);
     close();
   }
@@ -62,16 +84,18 @@ setErrorInfo({
     setDoneAlertVisible(false);
     close();
   }
-  function handleEror(){
-    setErrorAlertVisible(false);
-    close()
+  function handleEror() {
+    setNoteAlertVisible(false);
+    close();
   }
 
   return (
     <View>
-      <ErrorAlert errorInfo={errorInfo}
-      visible={errorAlertVisible}
-      handlePress={handleEror} />
+      <NoteAlert
+        noteInfo={noteInfo}
+        visible={noteAlertVisible}
+        handlePress={handleEror}
+      />
       <DoneAlert
         doneInfo={doneInfo}
         visible={doneAlertVisible}
